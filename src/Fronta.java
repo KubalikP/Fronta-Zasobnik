@@ -1,69 +1,57 @@
-public class Fronta<T> {
-    private T value;
-    private Node<T> next;
-
-    public Fronta(T value) {
-        this.value = value;
-        this.next = null;
-    }
-
-    public T getValue() {
-        return value;
-    }
-
-    public void setValue(T value) {
-        this.value = value;
-    }
-
-    public Node<T> getNext() {
-        return next;
-    }
-
-    public void setNext(Node<T> next) {
-        this.next = next;
-    }
-}
-
-public class FIFOQueue<T> {
+public class FIFO<T> {
     private Node<T> head;
     private Node<T> tail;
-
-    public FIFOQueue() {
+    private int size;
+    
+    public FIFO() {
         head = null;
         tail = null;
+        size = 0;
     }
-
-    public boolean isEmpty() {
-        return head == null;
-    }
-
-    public void enqueue(T value) {
-        Node<T> node = new Node<>(value);
-        if (isEmpty()) {
-            head = node;
-            tail = node;
+    
+    public void enqueue(T item) {
+        Node<T> newNode = new Node<>(item);
+        if (tail == null) {
+            head = newNode;
+            tail = newNode;
         } else {
-            tail.setNext(node);
-            tail = node;
+            tail.next = newNode;
+            tail = newNode;
         }
+        size++;
     }
-
+    
     public T dequeue() {
-        if (isEmpty()) {
+        if (head == null) {
             throw new NoSuchElementException();
         }
-        T value = head.getValue();
-        head = head.getNext();
+        T item = head.data;
+        head = head.next;
         if (head == null) {
             tail = null;
         }
-        return value;
+        size--;
+        return item;
     }
-
+    
     public T peek() {
-        if (isEmpty()) {
+        if (head == null) {
             throw new NoSuchElementException();
         }
-        return head.getValue();
+        return head.data;
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    private static class Node<T> {
+        T data;
+        Node<T> next;
+        
+        public Node(T data) {
+            this.data = data;
+            next = null;
+        }
     }
 }
